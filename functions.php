@@ -5,9 +5,9 @@ function conectaBanco()
 {
     
     $host = "localhost";
-    $user = "root";
-    $password = "";
-    $database = "gerenciador_custo_recurso";
+    $user = "porti668_Admin";
+    $password = "admin@@dmin#2oo5";
+    $database = "porti668_gerenciador_custo_recurso";
 
     $link = mysqli_connect($host , $user , $password , $database);
 
@@ -29,6 +29,8 @@ function verificaUser($nome, $senha){
 
 }
 
+//-----Funções para inserir dados ao banco-----//
+
 //Função para inserir dados ao banco 'produtos'
 function insertProduto($COD, $NOME, $PRC_VENDA){
 
@@ -46,7 +48,7 @@ function insertCompra($PRODUTO, $FORNECEDOR, $QTD, $TOTAL_COMPRA){
 
     $link = conectaBanco();
 
-    $sql = "INSERT INTO compras (FK_COD_PRODUTO, FK_ID_FORNECEDOR, QUANTIDADE, TOTAL_COMPRA) VALUES ('$PRODUTO', '$FORNECEDOR', '$QTD', '$TOTAL_COMPRA')";
+    $sql = "INSERT INTO compras (FK_COD_PRODUTO, FK_NOME_FORNECEDOR, QUANTIDADE, TOTAL_COMPRA) VALUES ('$PRODUTO', '$FORNECEDOR', '$QTD', '$TOTAL_COMPRA')";
     $result = mysqli_query($link, $sql);
 
     return $result;
@@ -77,7 +79,7 @@ function insertFornecedor($NOME, $CNPJ){
 
 }
 
-
+//-----Funções para selecionar dados do banco-----//
 
 //Função para selecionar tudo da tabela 'produtos'
 function selectProduto(){
@@ -163,10 +165,10 @@ function selectFornecedor(){
 
 }
 
+//-----Funções para fazer update de dados no banco-----//
 
-
-//
-function updateProduto($COL, $COD, $DADO){
+//Função para atualizar os dados da tabela produtos
+function updateProduto($COL, $DADO, $COD){
 
     $link = conectaBanco();
 
@@ -177,7 +179,165 @@ function updateProduto($COL, $COD, $DADO){
 
 }
 
+//Atualiza os dados na coluna 'PRECO_TOTAL' da tabela produtos
+function atuaizaPrecoTotalProduto($QTD, $PRC_VENDA, $COD){
 
+    $PRC_TOTAl = $QTD * $PRC_VENDA;
+
+    updateProduto("PRECO_TOTAL", $PRC_TOTAl, $COD);
+
+}
+
+//Função para atualizar dados da tabela produtos de acordo com os dados da tabela compras
+function compraProduto(){
+
+    $resultP = selectProduto();
+
+    if(mysqli_num_rows($resultP) != 0){
+    
+        foreach($resultP as $rp){
+    
+            $COD = $rp["CODIGO_PRODUTO"];
+            $QUANTIDADE_P = $rp["QUANTIDADE"];
+    
+            $resultC = selectCompraWhere($COD);
+    
+            if(mysqli_num_rows($resultC) != 0){
+                $NEWQUANTIDADE_C = 0;
+                foreach($resultC as $rc){
+    
+                    $QUANTIDADE_C = $rc["QUANTIDADE"];
+    
+                    $NEWQUANTIDADE_C = $QUANTIDADE_P + $QUANTIDADE_C;
+    
+                    updateProduto("QUANTIDADE", $NEWQUANTIDADE_C, $COD);
+    
+                }
+    
+            }
+    
+        }
+    
+    }
+
+}
+
+//Função para atualizar dados da tabela produtos de acordo com os dados da tabela vendas
+function vendeProduto(){
+
+    $resultP = selectProduto();
+
+    if(mysqli_num_rows($resultP) != 0){
+    
+        foreach($resultP as $rp){
+    
+            $COD = $rp["CODIGO_PRODUTO"];
+            $QUANTIDADE_P = $rp["QUANTIDADE"];
+    
+            $resultV = selectVendaWhere($COD);
+    
+            if(mysqli_num_rows($resultV) != 0){
+                $NEWQUANTIDADE_V = 0;
+                foreach($resultV as $rV){
+    
+                    $QUANTIDADE_V = $rV["QUANTIDADE"];
+    
+                    $NEWQUANTIDADE_V = $QUANTIDADE_P - $QUANTIDADE_V;
+    
+                    updateProduto("QUANTIDADE", $NEWQUANTIDADE_V, $COD);
+    
+                }
+    
+            }
+    
+        }
+    
+    }
+
+}
+
+//Função para adicionar os dados na tabela produtos se uma venda for excluida
+function adicionaProdutoQtd($ID){
+
+    $link = conectaBanco();
+
+    $sql = "SELECT * FROM vendas WHERE ID = '$ID'";
+    $resultV = mysqli_query($link, $sql);
+
+    if(mysqli_num_rows($resultV) != 0){
+    
+        foreach($resultV as $rV){
+    
+            $COD = $rV["FK_COD_PRODUTO"];
+            $QUANTIDADE_V = $rV["QUANTIDADE"];
+    
+        }
+
+
+    
+    }    
+
+    $sql = "SELECT * FROM produtos WHERE CODIGO_PRODUTO = '$COD'";
+    $resultP = mysqli_query($link, $sql);
+
+    if(mysqli_num_rows($resultP) != 0){
+    
+        foreach($resultP as $rP){
+    
+            $QUANTIDADE_P = $rP["QUANTIDADE"];
+    
+        }
+
+        $NEWQUANTIDADE_P = $QUANTIDADE_P + $QUANTIDADE_V;
+        echo $NEWQUANTIDADE_P;
+        updateProduto("QUANTIDADE", $NEWQUANTIDADE_P, $COD);        
+    
+    }    
+
+}
+
+//Função para remover os dados na tabela produtos se uma compra for excluida
+function removeProdutoQtd($ID){
+
+    $link = conectaBanco();
+
+    $sql = "SELECT * FROM compras WHERE ID = '$ID'";
+    $resultC = mysqli_query($link, $sql);
+
+    if(mysqli_num_rows($resultC) != 0){
+    
+        foreach($resultC as $rC){
+    
+            $COD = $rC["FK_COD_PRODUTO"];
+            $QUANTIDADE_V = $rC["QUANTIDADE"];
+    
+        }
+
+
+    
+    }    
+
+    $sql = "SELECT * FROM produtos WHERE CODIGO_PRODUTO = '$COD'";
+    $resultP = mysqli_query($link, $sql);
+
+    if(mysqli_num_rows($resultP) != 0){
+    
+        foreach($resultP as $rP){
+    
+            $QUANTIDADE_P = $rP["QUANTIDADE"];
+    
+        }
+
+        $NEWQUANTIDADE_P = $QUANTIDADE_P - $QUANTIDADE_V;
+        if($NEWQUANTIDADE_P < 0){ $NEWQUANTIDADE_P = 0; }
+        echo $NEWQUANTIDADE_P;
+        updateProduto("QUANTIDADE", $NEWQUANTIDADE_P, $COD);        
+    
+    }    
+
+}
+
+//-----Funções para deletar dados do banco-----//
 
 //Função para deletar dado da tabela 'produtos'
 function deletaProduto($COD){
@@ -192,11 +352,11 @@ function deletaProduto($COD){
 }
 
 //Função para deletar dado da tabela 'compras'
-function deletaCompra($COD){
+function deletaCompra($COL, $DADO){
 
     $link = conectaBanco();
 
-    $sql = "DELETE FROM compras WHERE FK_COD_PRODUTO = '$COD'";
+    $sql = "DELETE FROM compras WHERE $COL = '$DADO'";
     $result = mysqli_query($link, $sql);
 
     return $result;
@@ -204,11 +364,11 @@ function deletaCompra($COD){
 }
 
 //Função para deletar dado da tabela 'compras'
-function deletaVenda($ID){
+function deletaVenda($COL, $DADO){
 
     $link = conectaBanco();
 
-    $sql = "DELETE FROM vendas WHERE ID = '$ID'";
+    $sql = "DELETE FROM vendas WHERE $COL = '$DADO'";
     $result = mysqli_query($link, $sql);
 
     return $result;
@@ -216,11 +376,11 @@ function deletaVenda($ID){
 }
 
 //Função para deletar dado da tabela 'compras'
-function deletaFornecedor($NOME){
+function deletaFornecedor($ID){
 
     $link = conectaBanco();
 
-    $sql = "DELETE FROM fornecedores WHERE NOME = '$NOME'";
+    $sql = "DELETE FROM fornecedores WHERE ID = '$ID'";
     $result = mysqli_query($link, $sql);
 
     return $result;

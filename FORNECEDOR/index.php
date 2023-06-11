@@ -3,15 +3,15 @@
 include("../functions.php");
 
 //Verificação se os dados do formlário foram enviados
-if(isset($_REQUEST["codP"]) && isset($_REQUEST["nome"]) && isset($_REQUEST["prcV"])){
+if(isset($_REQUEST["nome"]) && isset($_REQUEST["cnpj"])){
 
-    $codP = $_REQUEST["codP"];
     $nome = $_REQUEST["nome"];
-    $prcV = $_REQUEST["prcV"];
-    //Verificação se os dados do formalário não estão vazios
-    if($codP != "" && $nome != "" && $prcV != ""){
+    $cnpj = $_REQUEST["cnpj"];
 
-        $result = insertProduto($codP, $nome, $prcV);
+    //Verificação se os dados do formalário não estão vazios
+    if($nome != "" && $cnpj != ""){
+
+        insertFornecedor($nome, $cnpj);
 
         header("location: ./?msg=insertTrue");
 
@@ -27,7 +27,7 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["nome"]) && isset($_REQUEST["prcV
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Gerenciador</title>
+    <title>Fornecedores - Gerenciador</title>
 
 </head>
 <body>
@@ -50,27 +50,24 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["nome"]) && isset($_REQUEST["prcV
 
                         <legend class="form__legend"></legend>
 
-                        <label for="codP" class="form__label">Código de produto</label>
-                        <input type="text" name="codP" id="codP" class="form__input">
+                        <label for="nome" class="form__label">Nome do Fornecedor</label>
+                        <input type="text" name="nome" id="nome">
                         
-                        <label for="nome" class="form__label">Nome do Produto</label>
-                        <input type="text" name="nome" id="nome" class="form__input">
-
-                        <label for="prcV" class="form__label">Preço de Venda do Produto</label>
-                        <input type="ranger" name="prcV" id="prcV" class="form__input" step="any">
+                        <label for="cnpj" class="form__label">CNPJ do Fornecedor</label>
+                        <input type="text" name="cnpj" id="cnpj" class="form__input">
 
                         <input type="submit" value="Iniciar Sessão" class="form__input--submit">
 
                     </form>
 
                     <?php
-                    //Verificando se a variável existe para a exibição de uma mensagem
+                    //Verificando se a variável existe para a exbição e uma mensagem
                     if(isset($_REQUEST["msg"])){
 
                         $msg = $_REQUEST["msg"];
 
                         if($msg == "insertTrue"){
-                            echo "Produto cadastrado com Sucesso";
+                            echo "Fornecedor cadastrado com Sucesso";
                         }
 
                     }

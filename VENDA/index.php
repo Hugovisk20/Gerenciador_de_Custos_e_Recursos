@@ -18,16 +18,26 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["qtd"])){
             foreach ($result as $r) {
                 
                 $PRC_VENDA = $r["PRECO_VENDA"];
+                $QTD = $r["QUANTIDADE"];
+
+                if($qtd < $QTD){
+
+                    $tot = $qtd * $PRC_VENDA;
+
+                    $result = insertVenda($codP, $qtd, $tot);
+
+                    //Atualizando a coluna quantidade da tabela produtos, removendo a quantidade vendida da coluna
+                    vendeProduto();
+
+                    header("location: ./?msg=insertTrue");  
+
+                }else{
+                    header("location: ./?msg=qtdInsufficient");
+                }
 
             }
 
         }
-
-        $tot = $qtd * $PRC_VENDA;
-
-        $result = insertVenda($codP, $qtd, $tot);
-
-        header("location: ./?msg=insertTrue");
 
     }
 
@@ -41,7 +51,7 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["qtd"])){
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Gerenciador</title>
+    <title>Vendas - Gerenciador</title>
 
 </head>
 <body>
@@ -70,13 +80,13 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["qtd"])){
                             <?php
                             
                             $result = selectProduto();
-
+                            //Verificando se a tabela produtos não está vazia
                             if(mysqli_num_rows($result) != 0){
 
                                 foreach($result as $r){
 
                                     $COD = $r["CODIGO_PRODUTO"];
-
+                                    //Exibindo a informação em formato de opção de um elemento HTML select
                                     echo "<option value='$COD'>$COD</option>";
 
                                 }
@@ -95,13 +105,15 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["qtd"])){
                     </form>
 
                     <?php
-                    //Veridicando se existe a variável
+                    //Verificando se existe a variável para a exibição de uma mensagem
                     if(isset($_REQUEST["msg"])){
 
                         $msg = $_REQUEST["msg"];
 
                         if($msg == "insertTrue"){
                             echo "Venda cadastrada com Sucesso";
+                        }else if($msg = "qtdInsufficient"){
+                            echo "Não pode vender mais produtos do que tem no estoque";
                         }
 
                     }
