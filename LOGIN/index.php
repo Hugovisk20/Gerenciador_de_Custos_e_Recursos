@@ -40,6 +40,10 @@ if(isset($_REQUEST["name"]) && isset($_REQUEST["psw"])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Gerenciador</title>
 
+    <link rel="stylesheet" href="../ASSETS/CSS/style.css">
+
+    <link rel="stylesheet" href="../LIBS/jquery-nice-select-1.1.0/css/nice-select.css">
+
 </head>
 <body>
 
@@ -55,9 +59,9 @@ if(isset($_REQUEST["name"]) && isset($_REQUEST["psw"])){
 
             <section class="box box--forms">
 
-                <div class="box__form--login">
+                <div class="box__form box__form--login">
 
-                    <form action="" method="post" class="form--login">
+                    <form action="" method="post" class="form form--login">
 
                         <legend class="form__legend"></legend>
 
@@ -87,6 +91,8 @@ if(isset($_REQUEST["name"]) && isset($_REQUEST["psw"])){
 
             </section>
 
+            <a href="../" class="box__ancor box__ancor--back">Voltar</a>
+
         </article>
 
     </main>
@@ -96,6 +102,17 @@ if(isset($_REQUEST["name"]) && isset($_REQUEST["psw"])){
 
 
     </footer>
+
+    <script src="../LIBS/jquery-nice-select-1.1.0/js/jquery.js"></script> 
+    <script src="../LIBS/jquery-nice-select-1.1.0/js/jquery.nice-select.js"></script>
+
+    <script>
+
+        $(document).ready(function() {
+        $('select').niceSelect();
+        });
+
+    </script>
     
 </body>
 </html>

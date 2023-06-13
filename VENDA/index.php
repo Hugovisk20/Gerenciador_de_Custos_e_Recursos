@@ -53,6 +53,10 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["qtd"])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vendas - Gerenciador</title>
 
+    <link rel="stylesheet" href="../ASSETS/CSS/style.css">
+
+    <link rel="stylesheet" href="../LIBS/jquery-nice-select-1.1.0/css/nice-select.css">
+
 </head>
 <body>
 
@@ -68,39 +72,43 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["qtd"])){
 
             <section class="box box--forms">
 
-                <div class="box__form--login">
+                <div class="box__form box__form--login">
 
-                    <form action="" method="post" class="form--login">
+                    <form action="" method="post" class="form form--login">
 
                         <legend class="form__legend"></legend>
 
-                        <label for="codP" class="form__label">Código de produto</label>
-                        <select name="codP" id="codP" class="form__input">
+                        <div class="form__campo form__campo--1">
+                            <label for="codP" class="form__label">Código de produto</label>
+                            <select name="codP" id="codP" class="form__input form__input--select">
 
-                            <?php
-                            
-                            $result = selectProduto();
-                            //Verificando se a tabela produtos não está vazia
-                            if(mysqli_num_rows($result) != 0){
+                                <?php
+                                
+                                $result = selectProduto();
+                                //Verificando se a tabela produtos não está vazia
+                                if(mysqli_num_rows($result) != 0){
 
-                                foreach($result as $r){
+                                    foreach($result as $r){
 
-                                    $COD = $r["CODIGO_PRODUTO"];
-                                    //Exibindo a informação em formato de opção de um elemento HTML select
-                                    echo "<option value='$COD'>$COD</option>";
+                                        $COD = $r["CODIGO_PRODUTO"];
+                                        //Exibindo a informação em formato de opção de um elemento HTML select
+                                        echo "<option class='form__option' value='$COD'>$COD</option>";
+
+                                    }
 
                                 }
+                                
+                                ?>
 
-                            }
-                            
-                            ?>
+                            </select>                            
+                        </div>
 
-                        </select>
-                        
-                        <label for="qtd" class="form__label">Quantidade</label>
-                        <input type="text" name="qtd" id="qtd" class="form__input">
-
-                        <input type="submit" value="Iniciar Sessão" class="form__input--submit">
+                        <div class="form__campo form__campo--2">
+                            <label for="qtd" class="form__label">Quantidade</label>
+                            <input type="text" name="qtd" id="qtd" class="form__input">                            
+                        </div>
+                    
+                        <input type="submit" value="Iniciar Sessão" class="form__input form__input--submit">
 
                     </form>
 
@@ -123,6 +131,8 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["qtd"])){
 
             </section>
 
+            <a href="../" class="box__ancor box__ancor--back">Voltar</a>
+
         </article>
 
     </main>
@@ -132,6 +142,17 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["qtd"])){
 
 
     </footer>
+
+    <script src="../LIBS/jquery-nice-select-1.1.0/js/jquery.js"></script> 
+    <script src="../LIBS/jquery-nice-select-1.1.0/js/jquery.nice-select.js"></script>
+
+    <script>
+
+        $(document).ready(function() {
+        $('select').niceSelect();
+        });
+
+    </script>
     
 </body>
 </html>

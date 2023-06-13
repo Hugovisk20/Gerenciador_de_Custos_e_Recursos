@@ -29,6 +29,10 @@ if(isset($_REQUEST["nome"]) && isset($_REQUEST["cnpj"])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fornecedores - Gerenciador</title>
 
+    <link rel="stylesheet" href="../ASSETS/CSS/style.css">
+
+    <link rel="stylesheet" href="../LIBS/jquery-nice-select-1.1.0/css/nice-select.css">
+
 </head>
 <body>
 
@@ -44,19 +48,23 @@ if(isset($_REQUEST["nome"]) && isset($_REQUEST["cnpj"])){
 
             <section class="box box--forms">
 
-                <div class="box__form--login">
+                <div class="box__form box__form--login">
 
-                    <form action="" method="post" class="form--login">
+                    <form action="" method="post" class="form form--login">
 
                         <legend class="form__legend"></legend>
 
-                        <label for="nome" class="form__label">Nome do Fornecedor</label>
-                        <input type="text" name="nome" id="nome">
-                        
-                        <label for="cnpj" class="form__label">CNPJ do Fornecedor</label>
-                        <input type="text" name="cnpj" id="cnpj" class="form__input">
+                        <div class="form__campo form__campo--1">
+                            <label for="nome" class="form__label">Nome do Fornecedor</label>
+                            <input type="text" name="nome" id="nome" class="form__input">                            
+                        </div>
 
-                        <input type="submit" value="Iniciar Sessão" class="form__input--submit">
+                        <div class="form__campo form__campo--2">
+                            <label for="cnpj" class="form__label">CNPJ do Fornecedor</label>
+                            <input type="text" name="cnpj" id="cnpj" class="form__input">                            
+                        </div>
+
+                        <input type="submit" value="Iniciar Sessão" class="form__input form__input--submit">
 
                     </form>
 
@@ -77,6 +85,8 @@ if(isset($_REQUEST["nome"]) && isset($_REQUEST["cnpj"])){
 
             </section>
 
+            <a href="../" class="box__ancor box__ancor--back">Voltar</a>
+
         </article>
 
     </main>
@@ -86,6 +96,17 @@ if(isset($_REQUEST["nome"]) && isset($_REQUEST["cnpj"])){
 
 
     </footer>
+
+    <script src="../LIBS/jquery-nice-select-1.1.0/js/jquery.js"></script> 
+    <script src="../LIBS/jquery-nice-select-1.1.0/js/jquery.nice-select.js"></script>
+
+    <script>
+
+        $(document).ready(function() {
+        $('select').niceSelect();
+        });
+
+    </script>
     
 </body>
 </html>

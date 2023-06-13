@@ -94,6 +94,10 @@ if(isset($_REQUEST["alF"])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Início - Gerenciador</title>
 
+    <link rel="stylesheet" href="./ASSETS/CSS/style.css">
+
+    <link rel="stylesheet" href="./LIBS/jquery-nice-select-1.1.0/css/nice-select.css">
+
 </head>
 <body>
 
@@ -101,7 +105,7 @@ if(isset($_REQUEST["alF"])){
 
         <nav class="nav">
 
-            <ul class="nav_list">
+            <ul class="nav__list">
 
                 <li class="nav_item"><a href="./?enserrarSessão">Enserrar Sessão</a></li>
 
@@ -119,6 +123,8 @@ if(isset($_REQUEST["alF"])){
 
                 <div class="box__contains box__contains--produtos">
 
+                    <a class='box__ancor box__ancor--form' href='./PRODUTO'>Cadastrar Produto</a>
+
                     <table class="box__table">
 
                         <thead class="box__thead">
@@ -131,7 +137,7 @@ if(isset($_REQUEST["alF"])){
 
                         </thead>
 
-                        <tbody>
+                        <tbody class="box__tbody">
 
                             <?php
                             
@@ -152,7 +158,7 @@ if(isset($_REQUEST["alF"])){
                                     $PRC_TOTAL = $r["PRECO_TOTAL"];
 
                                     //Mostra a informação na tela em formato HTML
-                                    echo "<tr> <td> $COD </td> <td> $NOME </td> <td> $QUANTIDADE </td> <td> $PRC_VENDA </td> <td> $PRC_TOTAL </td> <td> <a href='?exP=$COD'>Excluir</a> </td> <td> <a href='?alP=$COD'>Alterar</a> </td> </tr>";                            
+                                    echo "<tr> <td> $COD </td> <td> $NOME </td> <td> $QUANTIDADE </td> <td> $PRC_VENDA </td> <td> $PRC_TOTAL </td> <td> <a class='box__ancor box__ancor--ex' href='?exP=$COD'>Excluir</a> </td> <td> <a class='box__ancor box__ancor--al' href='?alP=$COD'>Alterar</a> </td> </tr>";                            
 
                                 }
 
@@ -164,11 +170,11 @@ if(isset($_REQUEST["alF"])){
 
                     </table>
 
-                    <a href="./PRODUTO">Cadastrar Produto</a>
-
                 </div>
 
                 <div class="box__contains box__contains--compras">
+
+                    <a class='box__ancor box__ancor--form' href='./COMPRA'>Cadastrar Compra</a>
 
                     <table class="box__table">
 
@@ -181,7 +187,7 @@ if(isset($_REQUEST["alF"])){
 
                         </thead>
 
-                        <tbody>
+                        <tbody class="box__tbody">
 
                             <?php
                                 
@@ -198,7 +204,7 @@ if(isset($_REQUEST["alF"])){
                                         $TOTAL_COMPRA = $r["TOTAL_COMPRA"];
 
                                         //Mostra na tela a informação em formato HTML
-                                        echo "<tr> <td> $COD </td> <td> $NOME_FORNECEDOR </td> <td> $QUANTIDADE </td> <td> $TOTAL_COMPRA </td> <td> <a href='?exC=$ID'>Excluir</a> </td> <td> <a href='?alC=$ID'>Alterar</a> </td> </tr>";
+                                        echo "<tr> <td> $COD </td> <td> $NOME_FORNECEDOR </td> <td> $QUANTIDADE </td> <td> $TOTAL_COMPRA </td> <td> <a class='box__ancor box__ancor--ex' href='?exC=$ID'>Excluir</a> </td> <td> <a class='box__ancor box__ancor--al' href='?alC=$ID'>Alterar</a> </td> </tr>";
 
                                     }
 
@@ -208,13 +214,13 @@ if(isset($_REQUEST["alF"])){
 
                         </tbody>
 
-                    </table>
-
-                    <a href="./COMPRA">Cadastrar Compra</a>
+                    </table>                   
 
                 </div>
 
                 <div class="box__contains box__contains--vendas">
+
+                    <a class='box__ancor box__ancor--form' href='./VENDA'>Cadastrar Venda</a>
 
                     <table class="box__table">
 
@@ -226,7 +232,7 @@ if(isset($_REQUEST["alF"])){
 
                         </thead>
 
-                        <tbody>
+                        <tbody class="box__tbody">
 
                             <?php
                                 
@@ -242,7 +248,7 @@ if(isset($_REQUEST["alF"])){
                                         $TOTAL_VENDA = $r["TOTAL_VENDA"];
 
                                         //Mostra na tela a informação em formato HTML
-                                        echo "<tr> <td> $COD </td> <td> $QUANTIDADE </td> <td> $TOTAL_VENDA </td> <td> <a href='?exV=$ID'>Excluir</a> </td> <td> <a href='?alV=$ID'>Alterar</a> </td> </tr>";
+                                        echo "<tr> <td> $COD </td> <td> $QUANTIDADE </td> <td> $TOTAL_VENDA </td> <td> <a class='box__ancor box__ancor--ex' href='?exV=$ID'>Excluir</a> </td> <td> <a class='box__ancor box__ancor--al' href='?alV=$ID'>Alterar</a> </td> </tr>";
 
                                     }
 
@@ -254,11 +260,11 @@ if(isset($_REQUEST["alF"])){
 
                     </table>
 
-                    <a href="./VENDA">Cadastrar Venda</a>
-
                 </div>
 
                 <div class="box__contains box__contains--fornecedores">
+
+                    <a class='box__ancor box__ancor--form' href='./FORNECEDOR'>Cadastrar Fornecedor</a>
 
                     <table class="box__table">
 
@@ -269,7 +275,7 @@ if(isset($_REQUEST["alF"])){
 
                         </thead>
 
-                        <tbody>
+                        <tbody class="box__tbody">
 
                             <?php
                                 
@@ -284,7 +290,7 @@ if(isset($_REQUEST["alF"])){
                                         $CNPJ = $r["CNPJ"];
                                         
                                         //Mostra na tela a informação em formato HTML
-                                        echo "<tr> <td> $NOME </td> <td> $CNPJ </td> <td> <a href='?exF=$ID'>Excluir</a> </td> <td> <a href='?alF=$ID'>Alterar</a> </td> </tr>";
+                                        echo "<tr> <td> $NOME </td> <td> $CNPJ </td> <td> <a class='box__ancor box__ancor--ex' href='?exF=$ID'>Excluir</a> </td> <td> <a class='box__ancor box__ancor--al' href='?alF=$ID'>Alterar</a> </td> <td> </td> </tr>";
 
                                     }
 
@@ -296,7 +302,7 @@ if(isset($_REQUEST["alF"])){
 
                     </table>
 
-                    <a href="./FORNECEDOR">Cadastrar Fornecedor</a>
+                    
 
                 </div>
 
@@ -311,6 +317,9 @@ if(isset($_REQUEST["alF"])){
 
 
     </footer>
+
+    <script src="path/to/jquery.js"></script> 
+    <script src="path/to/jquery.nice-select.js"></script>
    
 </body>
 </html>

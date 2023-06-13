@@ -29,6 +29,10 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["nome"]) && isset($_REQUEST["prcV
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Gerenciador</title>
 
+    <link rel="stylesheet" href="../ASSETS/CSS/style.css">
+
+    <link rel="stylesheet" href="../LIBS/jquery-nice-select-1.1.0/css/nice-select.css">
+
 </head>
 <body>
 
@@ -44,22 +48,28 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["nome"]) && isset($_REQUEST["prcV
 
             <section class="box box--forms">
 
-                <div class="box__form--login">
+                <div class="box__form box__form--login">
 
-                    <form action="" method="post" class="form--login">
+                    <form action="" method="post" class="form form--login">
 
                         <legend class="form__legend"></legend>
 
-                        <label for="codP" class="form__label">Código de produto</label>
-                        <input type="text" name="codP" id="codP" class="form__input">
+                        <div class="form__campo form__campo--1">
+                            <label for="codP" class="form__label">Código de produto</label>
+                            <input type="text" name="codP" id="codP" class="form__input">
+                        </div>
+
+                        <div class="form__campo form__campo--2">
+                            <label for="nome" class="form__label">Nome do Produto</label>
+                            <input type="text" name="nome" id="nome" class="form__input">                            
+                        </div>
                         
-                        <label for="nome" class="form__label">Nome do Produto</label>
-                        <input type="text" name="nome" id="nome" class="form__input">
+                        <div class="form__campo form__campo--3">
+                            <label for="prcV" class="form__label">Preço de Venda do Produto</label>
+                            <input type="ranger" name="prcV" id="prcV" class="form__input" step="any">                            
+                        </div>
 
-                        <label for="prcV" class="form__label">Preço de Venda do Produto</label>
-                        <input type="ranger" name="prcV" id="prcV" class="form__input" step="any">
-
-                        <input type="submit" value="Iniciar Sessão" class="form__input--submit">
+                        <input type="submit" value="Iniciar Sessão" class="form__input form__input--submit">
 
                     </form>
 
@@ -80,6 +90,8 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["nome"]) && isset($_REQUEST["prcV
 
             </section>
 
+            <a href="../" class="box__ancor box__ancor--back">Voltar</a>
+
         </article>
 
     </main>
@@ -89,6 +101,17 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["nome"]) && isset($_REQUEST["prcV
 
 
     </footer>
+
+    <script src="../LIBS/jquery-nice-select-1.1.0/js/jquery.js"></script> 
+    <script src="../LIBS/jquery-nice-select-1.1.0/js/jquery.nice-select.js"></script>
+
+    <script>
+
+        $(document).ready(function() {
+        $('select').niceSelect();
+        });
+
+    </script>
     
 </body>
 </html>
