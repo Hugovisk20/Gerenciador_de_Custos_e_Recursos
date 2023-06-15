@@ -70,6 +70,10 @@ html{
 
 /*-----MAIN-----*/
 
+.main .main--container{
+    width: 90%;
+    margin: auto;
+}
 .main .main--container .box__ancor--back{
     padding: 1rem 5rem;
     background-color: var(--Vivid-Sky-Blue);
@@ -78,12 +82,14 @@ html{
     color: var(--Black);
 }
 
-/*Página Home*/
+/*Tabelas*/
 .box--tabelas{
     display: flex;
     flex-direction: column;
-    gap: 3rem;
-    padding-left: 7rem;
+    gap: 5rem;
+}
+.box--tabelas .box__contains .box__container{
+    overflow-x: auto;
 }
 .box--tabelas .box__table{
     border-collapse: collapse;
@@ -118,7 +124,7 @@ html{
     color: var(--Black);
 }
 .box--tabelas .box__ancor--form{
-    padding: .2rem 1rem;
+    padding: .5rem 2rem;
     background-color: var(--Brandeis-Blue);
     border-radius: .6rem;
     text-decoration: none;
@@ -131,6 +137,7 @@ html{
     justify-content: center;
 
     width: 100%;
+    margin-bottom: 2rem;
 }
 .box--forms .box__form{
     width: 50%;
@@ -176,4 +183,10 @@ html{
 .box--forms .box__form .form .form__input--select{
     display: flex;
     align-items: center;
+}
+
+@media screen and (max-width: 650px) {
+    .box--forms .box__form{
+        width: 100%;
+    }
 }

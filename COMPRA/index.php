@@ -3,32 +3,20 @@
 include("../functions.php");
 
 //Verificação se os dados do formlário foram enviados
-if(isset($_REQUEST["codP"]) && isset($_REQUEST["codF"]) && isset($_REQUEST["qtd"])){
+if(isset($_REQUEST["codP"]) && isset($_REQUEST["codF"]) && isset($_REQUEST["prcC"]) && isset($_REQUEST["qtd"])){
 
     $codP = $_REQUEST["codP"];
     $codF = $_REQUEST["codF"];
+    $prcC = $_REQUEST["prcC"];
     $qtd = $_REQUEST["qtd"];
 
     //Verificação se os dados do formalário não estão vazios
-    if($codP != "" && $codF != "" && $qtd != ""){
-
-        $result = selectProdutoWhere($codP);
-
-        //Verificando se a tabela produtos não está vazia
-        if(mysqli_num_rows($result) != 0){
-
-            foreach ($result as $r) {
-                
-                $PRC_VENDA = $r["PRECO_VENDA"];
-
-            }
-
-        }
+    if($codP != "" && $codF != "" && $prcC != "" && $qtd != ""){
 
         //Calculando total do compra e armazenando na variável, adicionando quantidade comprada a coluna
-        $tot = $qtd * $PRC_VENDA;
+        $tot = $qtd * $prcC;
 
-        $result = insertCompra($codP, $codF, $qtd, $tot);
+        $result = insertCompra($codP, $codF, $prcC, $qtd, $tot);
 
         //Atulazizando coluna quantidade da tabela produtos
         compraProduto();
@@ -58,7 +46,15 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["codF"]) && isset($_REQUEST["qtd"
 
     <header class="header">
 
+        <nav class="nav">
 
+            <ul class="nav__list">
+
+                <li class="nav_item"><a href="./?enserrarSessão">Enserrar Sessão</a></li>
+
+            </ul>
+
+        </nav>
 
     </header>
 
@@ -125,6 +121,11 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["codF"]) && isset($_REQUEST["qtd"
                         </div>
 
                         <div class="form__campo form__campo--3">
+                            <label for="prcC" class="form__label">Preço da Compra</label>
+                            <input type="text" name="prcC" id="prcC" class="form__input">                            
+                        </div>
+
+                        <div class="form__campo form__campo--4">
                             <label for="qtd" class="form__label">Quantidade</label>
                             <input type="text" name="qtd" id="qtd" class="form__input">                            
                         </div>
@@ -140,7 +141,7 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["codF"]) && isset($_REQUEST["qtd"
                         $msg = $_REQUEST["msg"];
 
                         if($msg == "insertTrue"){
-                            echo "Venda cadastrada com Sucesso";
+                            echo "Compra cadastrada com Sucesso";
                         }
 
                     }

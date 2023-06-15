@@ -32,24 +32,12 @@ if(isset($_REQUEST["exP"])){
     header("location: ./");
 }
 
-if(isset($_REQUEST["alP"])){
-    $COD = $_REQUEST["alP"];
-
-    header("location: ./");
-}
-
 if(isset($_REQUEST["exV"])){
     $ID = $_REQUEST["exV"];
 
     adicionaProdutoQtd($ID);
 
     deletaVenda("ID", $ID);
-
-    header("location: ./");
-}
-
-if(isset($_REQUEST["alV"])){
-    $ID = $_REQUEST["alV"];
 
     header("location: ./");
 }
@@ -64,22 +52,10 @@ if(isset($_REQUEST["exC"])){
     header("location: ./");
 }
 
-if(isset($_REQUEST["alC"])){
-    $COD = $_REQUEST["alC"];
-
-    header("location: ./");
-}
-
 if(isset($_REQUEST["exF"])){
     $ID = $_REQUEST["exF"];
 
     deletaFornecedor($ID);
-
-    header("location: ./");
-}
-
-if(isset($_REQUEST["alF"])){
-    $COD = $_REQUEST["alF"];
 
     header("location: ./");
 }
@@ -125,50 +101,64 @@ if(isset($_REQUEST["alF"])){
 
                     <a class='box__ancor box__ancor--form' href='./PRODUTO'>Cadastrar Produto</a>
 
-                    <table class="box__table">
+                    <div class="box__container">
 
-                        <thead class="box__thead">
+                        <table class="box__table">
 
-                            <th class="box__th">Código</th>
-                            <th class="box__th">Nome</th>
-                            <th class="box__th">Quantidade</th>
-                            <th class="box__th">Preço da Venda</th>
-                            <th class="box__th">Preço Total de Venda</th>
+                            <thead class="box__thead">
 
-                        </thead>
+                                <th class="box__th">Código</th>
+                                <th class="box__th">Nome</th>
+                                <th class="box__th">Unidade de Produto</th>
+                                <th class="box__th">Quantidade</th>
+                                <th class="box__th">Preço de Venda</th>
+                                <th class="box__th">Preço Total da Mercadoria</th>
 
-                        <tbody class="box__tbody">
+                            </thead>
 
-                            <?php
-                            
-                            $result = selectProduto();
-                            //verifica se a tabela produtos não está vazia
-                            if(mysqli_num_rows($result) != 0){
+                            <tbody class="box__tbody">
 
-                                foreach($result as $r){
+                                <?php
+                                
+                                $result = selectProduto();
+                                //verifica se a tabela produtos não está vazia
+                                if(mysqli_num_rows($result) != 0){
 
-                                    $COD = $r["CODIGO_PRODUTO"];
-                                    $NOME = $r["NOME"];
-                                    $QUANTIDADE = $r["QUANTIDADE"];
-                                    $PRC_VENDA = $r["PRECO_VENDA"];
-                
-                                    //Atualiza na tabela produtos o preço total de venda da mercadoria
-                                    atuaizaPrecoTotalProduto($QUANTIDADE, $PRC_VENDA, $COD);
+                                    foreach($result as $r){
 
-                                    $PRC_TOTAL = $r["PRECO_TOTAL"];
+                                        $ID = $r["ID"];
+                                        $COD = $r["CODIGO_PRODUTO"];
+                                        $NOME = $r["NOME"];
+                                        $UNIDADE = $r["UNIDADE"];
+                                        $QUANTIDADE = $r["QUANTIDADE"];
+                                        $PRC_VENDA = $r["PRECO_VENDA"];
 
-                                    //Mostra a informação na tela em formato HTML
-                                    echo "<tr> <td> $COD </td> <td> $NOME </td> <td> $QUANTIDADE </td> <td> $PRC_VENDA </td> <td> $PRC_TOTAL </td> <td> <a class='box__ancor box__ancor--ex' href='?exP=$COD'>Excluir</a> </td> <td> <a class='box__ancor box__ancor--al' href='?alP=$COD'>Alterar</a> </td> </tr>";                            
+                                        if($QUANTIDADE < 0){
+                                            $link = conectaBanco();
+
+                                            $sql = "DELETE FROM vendas WHERE CODIGO_PRODUTO = '$COD'";
+                                            $result = mysqli_query($link, $sql);
+                                        }
+                    
+                                        //Atualiza na tabela produtos o preço total de venda da mercadoria
+                                        atuaizaPrecoTotalProduto($QUANTIDADE, $PRC_VENDA, $COD);
+
+                                        $PRC_TOTAL = $r["PRECO_TOTAL"];
+
+                                        //Mostra a informação na tela em formato HTML
+                                        echo "<tr> <td> $COD </td> <td> $NOME </td> <td> $UNIDADE </td> <td> $QUANTIDADE </td> <td> $PRC_VENDA </td> <td> $PRC_TOTAL </td> <td> <a class='box__ancor box__ancor--ex' href='?exP=$COD'>Excluir</a> </td> <td> <a class='box__ancor box__ancor--al' href='./PRODUTO?alP=$ID'>Alterar</a> </td> </tr>";                            
+
+                                    }
 
                                 }
+                                
+                                ?>
 
-                            }
-                            
-                            ?>
+                            </tbody>
 
-                        </tbody>
+                        </table>
 
-                    </table>
+                    </div>
 
                 </div>
 
@@ -176,45 +166,51 @@ if(isset($_REQUEST["alF"])){
 
                     <a class='box__ancor box__ancor--form' href='./COMPRA'>Cadastrar Compra</a>
 
-                    <table class="box__table">
+                    <div class="box__container">
 
-                        <thead class="box__thead">
+                        <table class="box__table">
 
-                            <th class="box__th">Produto</th>
-                            <th class="box__th">Fornecedor</th>
-                            <th class="box__th">Quantidade</th>
-                            <th class="box__th">Total da Venda</th>
+                            <thead class="box__thead">
 
-                        </thead>
+                                <th class="box__th">Produto</th>
+                                <th class="box__th">Fornecedor</th>
+                                <th class="box__th">Preço da Compra</th>
+                                <th class="box__th">Quantidade</th>
+                                <th class="box__th">Total da Compra</th>
 
-                        <tbody class="box__tbody">
+                            </thead>
 
-                            <?php
-                                
-                                $result = selectCompra();
-                                //Verifica se a tabela vendas não está vazia
-                                if(mysqli_num_rows($result) != 0){
+                            <tbody class="box__tbody">
 
-                                    foreach($result as $r){
+                                <?php
+                                    
+                                    $result = selectCompra();
+                                    //Verifica se a tabela vendas não está vazia
+                                    if(mysqli_num_rows($result) != 0){
 
-                                        $ID = $r["ID"];
-                                        $COD = $r["FK_COD_PRODUTO"];
-                                        $NOME_FORNECEDOR = $r["FK_NOME_FORNECEDOR"];
-                                        $QUANTIDADE = $r["QUANTIDADE"];
-                                        $TOTAL_COMPRA = $r["TOTAL_COMPRA"];
+                                        foreach($result as $r){
 
-                                        //Mostra na tela a informação em formato HTML
-                                        echo "<tr> <td> $COD </td> <td> $NOME_FORNECEDOR </td> <td> $QUANTIDADE </td> <td> $TOTAL_COMPRA </td> <td> <a class='box__ancor box__ancor--ex' href='?exC=$ID'>Excluir</a> </td> <td> <a class='box__ancor box__ancor--al' href='?alC=$ID'>Alterar</a> </td> </tr>";
+                                            $ID = $r["ID"];
+                                            $COD = $r["FK_COD_PRODUTO"];
+                                            $NOME_FORNECEDOR = $r["FK_NOME_FORNECEDOR"];
+                                            $PRC_COMPRA = $r["PRECO_COMPRA"];
+                                            $QUANTIDADE = $r["QUANTIDADE"];
+                                            $TOTAL_COMPRA = $r["TOTAL_COMPRA"];
+
+                                            //Mostra na tela a informação em formato HTML
+                                            echo "<tr> <td> $COD </td> <td> $NOME_FORNECEDOR </td> <td> $PRC_COMPRA </td> <td> $QUANTIDADE </td> <td> $TOTAL_COMPRA </td> <td> <a class='box__ancor box__ancor--ex' href='?exC=$ID'>Excluir</a> </td> </tr>";
+
+                                        }
 
                                     }
+                                    
+                                ?>
 
-                                }
-                                
-                            ?>
+                            </tbody>
 
-                        </tbody>
+                        </table>
 
-                    </table>                   
+                    </div>
 
                 </div>
 
@@ -222,43 +218,49 @@ if(isset($_REQUEST["alF"])){
 
                     <a class='box__ancor box__ancor--form' href='./VENDA'>Cadastrar Venda</a>
 
-                    <table class="box__table">
+                    <div class="box__container">
 
-                        <thead class="box__thead">
+                        <table class="box__table">
 
-                            <th class="box__th">Produto</th>
-                            <th class="box__th">Quantidade</th>
-                            <th class="box__th">Total da Venda</th>
+                            <thead class="box__thead">
 
-                        </thead>
+                                <th class="box__th">Produto</th>
+                                <th class="box__th">Preço de Venda do Produto</th>
+                                <th class="box__th">Quantidade</th>
+                                <th class="box__th">Total da Venda</th>
 
-                        <tbody class="box__tbody">
+                            </thead>
 
-                            <?php
-                                
-                                $result = selectVenda();
-                                //Verifica se a tabela vendas não está vazia
-                                if(mysqli_num_rows($result) != 0){
+                            <tbody class="box__tbody">
 
-                                    foreach($result as $r){
+                                <?php
+                                    
+                                    $result = selectVenda();
+                                    //Verifica se a tabela vendas não está vazia
+                                    if(mysqli_num_rows($result) != 0){
 
-                                        $ID = $r["ID"];
-                                        $COD = $r["FK_COD_PRODUTO"];
-                                        $QUANTIDADE = $r["QUANTIDADE"];
-                                        $TOTAL_VENDA = $r["TOTAL_VENDA"];
+                                        foreach($result as $r){
 
-                                        //Mostra na tela a informação em formato HTML
-                                        echo "<tr> <td> $COD </td> <td> $QUANTIDADE </td> <td> $TOTAL_VENDA </td> <td> <a class='box__ancor box__ancor--ex' href='?exV=$ID'>Excluir</a> </td> <td> <a class='box__ancor box__ancor--al' href='?alV=$ID'>Alterar</a> </td> </tr>";
+                                            $ID = $r["ID"];
+                                            $COD = $r["FK_COD_PRODUTO"];
+                                            $PRC_VENDA = $r["FK_PRCV_PRODUTO"];
+                                            $QUANTIDADE = $r["QUANTIDADE"];
+                                            $TOTAL_VENDA = $r["TOTAL_VENDA"];
+
+                                            //Mostra na tela a informação em formato HTML
+                                            echo "<tr> <td> $COD </td> <td> $PRC_VENDA </td> <td> $QUANTIDADE </td> <td> $TOTAL_VENDA </td> <td> <a class='box__ancor box__ancor--ex' href='?exV=$ID'>Excluir</a> </td> </tr>";
+
+                                        }
 
                                     }
+                                    
+                                ?>
 
-                                }
-                                
-                            ?>
+                            </tbody>
 
-                        </tbody>
+                        </table>
 
-                    </table>
+                    </div>
 
                 </div>
 
@@ -266,43 +268,45 @@ if(isset($_REQUEST["alF"])){
 
                     <a class='box__ancor box__ancor--form' href='./FORNECEDOR'>Cadastrar Fornecedor</a>
 
-                    <table class="box__table">
+                    <div class="box__container">
 
-                        <thead class="box__thead">
+                        <table class="box__table">
 
-                            <th class="box__th">Nome do Fornecedor</th>
-                            <th class="box__th">CNPJ do Fornecedor</th>
+                            <thead class="box__thead">
 
-                        </thead>
+                                <th class="box__th">Nome do Fornecedor</th>
+                                <th class="box__th">CNPJ do Fornecedor</th>
 
-                        <tbody class="box__tbody">
+                            </thead>
 
-                            <?php
-                                
-                                $result = selectFornecedor();
-                                //Verifica se a tabela vendas não está vazia
-                                if(mysqli_num_rows($result) != 0){
+                            <tbody class="box__tbody">
 
-                                    foreach($result as $r){
+                                <?php
+                                    
+                                    $result = selectFornecedor();
+                                    //Verifica se a tabela vendas não está vazia
+                                    if(mysqli_num_rows($result) != 0){
 
-                                        $ID = $r["ID"];
-                                        $NOME = $r["NOME"];
-                                        $CNPJ = $r["CNPJ"];
-                                        
-                                        //Mostra na tela a informação em formato HTML
-                                        echo "<tr> <td> $NOME </td> <td> $CNPJ </td> <td> <a class='box__ancor box__ancor--ex' href='?exF=$ID'>Excluir</a> </td> <td> <a class='box__ancor box__ancor--al' href='?alF=$ID'>Alterar</a> </td> <td> </td> </tr>";
+                                        foreach($result as $r){
+
+                                            $ID = $r["ID"];
+                                            $NOME = $r["NOME"];
+                                            $CNPJ = $r["CNPJ"];
+                                            
+                                            //Mostra na tela a informação em formato HTML
+                                            echo "<tr> <td> $NOME </td> <td> $CNPJ </td> <td> <a class='box__ancor box__ancor--ex' href='?exF=$ID'>Excluir</a> </td> <td> <a class='box__ancor box__ancor--al' href='./FORNECEDOR?alF=$ID'>Alterar</a> </td> </tr>";
+
+                                        }
 
                                     }
+                                    
+                                ?>
 
-                                }
-                                
-                            ?>
+                            </tbody>
 
-                        </tbody>
+                        </table>
 
-                    </table>
-
-                    
+                    </div> 
 
                 </div>
 
@@ -317,9 +321,6 @@ if(isset($_REQUEST["alF"])){
 
 
     </footer>
-
-    <script src="path/to/jquery.js"></script> 
-    <script src="path/to/jquery.nice-select.js"></script>
    
 </body>
 </html>

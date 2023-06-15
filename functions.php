@@ -32,11 +32,11 @@ function verificaUser($nome, $senha){
 //-----Funções para inserir dados ao banco-----//
 
 //Função para inserir dados ao banco 'produtos'
-function insertProduto($COD, $NOME, $PRC_VENDA){
+function insertProduto($COD, $NOME, $UNIDADE, $PRC_VENDA){
 
     $link = conectaBanco();
 
-    $sql = "INSERT INTO produtos (CODIGO_PRODUTO, NOME, PRECO_VENDA) VALUES ('$COD', '$NOME', '$PRC_VENDA')";
+    $sql = "INSERT INTO produtos (CODIGO_PRODUTO, NOME, UNIDADE, PRECO_VENDA) VALUES ('$COD', '$NOME', '$UNIDADE', '$PRC_VENDA')";
     $result = mysqli_query($link, $sql);
 
     return $result;
@@ -44,11 +44,11 @@ function insertProduto($COD, $NOME, $PRC_VENDA){
 }
 
 //Função para inserir dados ao banco 'compras'
-function insertCompra($PRODUTO, $FORNECEDOR, $QTD, $TOTAL_COMPRA){
+function insertCompra($PRODUTO, $FORNECEDOR, $PRC_COMPRA, $QTD, $TOTAL_COMPRA){
 
     $link = conectaBanco();
 
-    $sql = "INSERT INTO compras (FK_COD_PRODUTO, FK_NOME_FORNECEDOR, QUANTIDADE, TOTAL_COMPRA) VALUES ('$PRODUTO', '$FORNECEDOR', '$QTD', '$TOTAL_COMPRA')";
+    $sql = "INSERT INTO compras (FK_COD_PRODUTO, FK_NOME_FORNECEDOR, PRECO_COMPRA, QUANTIDADE, TOTAL_COMPRA) VALUES ('$PRODUTO', '$FORNECEDOR', '$PRC_COMPRA', '$QTD', '$TOTAL_COMPRA')";
     $result = mysqli_query($link, $sql);
 
     return $result;
@@ -56,11 +56,11 @@ function insertCompra($PRODUTO, $FORNECEDOR, $QTD, $TOTAL_COMPRA){
 }
 
 //Função para inserir dados ao banco 'vendas'
-function insertVenda($PRODUTO, $QTD, $TOTAL_VENDA){
+function insertVenda($PRC_VENDA, $PRODUTO, $QTD, $TOTAL_VENDA){
 
     $link = conectaBanco();
 
-    $sql = "INSERT INTO vendas (FK_COD_PRODUTO, QUANTIDADE, TOTAL_VENDA) VALUES ('$PRODUTO', '$QTD', '$TOTAL_VENDA')";
+    $sql = "INSERT INTO vendas (FK_PRCV_PRODUTO, FK_COD_PRODUTO, QUANTIDADE, TOTAL_VENDA) VALUES ('$PRC_VENDA', '$PRODUTO', '$QTD', '$TOTAL_VENDA')";
     $result = mysqli_query($link, $sql);
 
     return $result;
@@ -173,6 +173,54 @@ function updateProduto($COL, $DADO, $COD){
     $link = conectaBanco();
 
     $sql = "UPDATE produtos SET $COL = $DADO WHERE CODIGO_PRODUTO = '$COD'";
+    $result = mysqli_query($link, $sql);
+
+    return $result;
+
+}
+
+//Função para atualizar os dados da tabela produtos
+function updateProdutoID($COL1, $COL2, $COL3, $D1, $D2, $D3, $ID){
+
+    $link = conectaBanco();
+
+    $sql = "UPDATE produtos SET $COL1 = '$D1', $COL2 = '$D2', $COL3 = '$D3' WHERE ID = '$ID'";
+    $result = mysqli_query($link, $sql);
+
+    return $result;
+
+}
+
+//Função para atualizar os dados da tabela produtos
+function updateCompra($COL, $DADO, $ID){
+
+    $link = conectaBanco();
+
+    $sql = "UPDATE compras SET $COL = $DADO WHERE ID = '$ID'";
+    $result = mysqli_query($link, $sql);
+
+    return $result;
+
+}
+
+//Função para atualizar os dados da tabela produtos
+function updateVenda($COL, $DADO, $ID){
+
+    $link = conectaBanco();
+
+    $sql = "UPDATE vendas SET $COL = $DADO WHERE ID = '$ID'";
+    $result = mysqli_query($link, $sql);
+
+    return $result;
+
+}
+
+//Função para atualizar os dados da tabela produtos
+function updateFornecedor($COL, $DADO, $ID){
+
+    $link = conectaBanco();
+
+    $sql = "UPDATE fornecedores SET $COL = '$DADO' WHERE ID = '$ID'";
     $result = mysqli_query($link, $sql);
 
     return $result;
@@ -329,7 +377,10 @@ function removeProdutoQtd($ID){
         }
 
         $NEWQUANTIDADE_P = $QUANTIDADE_P - $QUANTIDADE_V;
-        if($NEWQUANTIDADE_P < 0){ $NEWQUANTIDADE_P = 0; }
+        if($NEWQUANTIDADE_P < 0){
+            $NEWQUANTIDADE_P = 0;
+            deletaVenda("FK_COD_PRODUTO", $COD);
+        }
         echo $NEWQUANTIDADE_P;
         updateProduto("QUANTIDADE", $NEWQUANTIDADE_P, $COD);        
     

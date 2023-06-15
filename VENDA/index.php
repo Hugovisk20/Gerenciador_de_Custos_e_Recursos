@@ -24,7 +24,7 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["qtd"])){
 
                     $tot = $qtd * $PRC_VENDA;
 
-                    $result = insertVenda($codP, $qtd, $tot);
+                    $result = insertVenda($PRC_VENDA, $codP, $qtd, $tot);
 
                     //Atualizando a coluna quantidade da tabela produtos, removendo a quantidade vendida da coluna
                     vendeProduto();
@@ -62,7 +62,15 @@ if(isset($_REQUEST["codP"]) && isset($_REQUEST["qtd"])){
 
     <header class="header">
 
+        <nav class="nav">
 
+            <ul class="nav__list">
+
+                <li class="nav_item"><a href="./?enserrarSessão">Enserrar Sessão</a></li>
+
+            </ul>
+
+        </nav>
 
     </header>
 
